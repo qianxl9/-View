@@ -119,7 +119,7 @@ public class PathView extends View {
         String writing1 ="正常";
         String writing2 = "预警";
         String writing3 = "警告";
-        canvas.save();
+        canvas.save();   //利用画布的旋转来绘制刻度上的文字。
         canvas.rotate(-60,radius,radius);
         canvas.drawText(writing1,zhongx,writingDistance+dp2px(5),writingProgressPaint);
         canvas.rotate(90,radius,radius);
@@ -134,13 +134,13 @@ public class PathView extends View {
     private int startdegress = -120;
     private int pointerHigh;
 
-    private void drawSacleArc(Canvas canvas) {
+    private void drawSacleArc(Canvas canvas) {  //绘制表盘上的刻度和文字
         sacleArcLeft =(int) writingDistance+dp2px(10);
         sacleArcReight = (int) progressRadius-dp2px(10);
         canvas.save();
         RectF rectF = new RectF(sacleArcLeft,sacleArcLeft,sacleArcReight,sacleArcReight);
         canvas.drawArc(rectF,150,240,false,scaleArcPaint);
-        canvas.rotate(startdegress,radius,radius);
+        canvas.rotate(startdegress,radius,radius);  //  此语句把画布转到O度。
         int x = 0;
         for (int i = 0 ; i<= 40; i++) {
                 int top = dp2px(10);
@@ -156,29 +156,29 @@ public class PathView extends View {
                     top-=dp2px(4);
                     canvas.drawLine(radius,sacleArcLeft,radius,sacleArcLeft+top,scalePaint );
                 }
-            canvas.rotate(6,radius,radius);
+            canvas.rotate(6,radius,radius); //当每次把刻度绘制后，旋转6度再绘制。
         }
         canvas.restore();
     }
 
-    private int centerRadius = dp2px(17);
+    private int centerRadius = dp2px(17);  //设置指针中心圆的半径。
     private int numble;
 
     private void setNumble(int x) {
         this.numble = x;
     }
 
-    private void drawPointer(Canvas canvas) {
+    private void drawPointer(Canvas canvas) {  //绘制中间的指针
         canvas.save();
-        canvas.rotate(startdegress,radius,radius);
+        canvas.rotate(startdegress,radius,radius); //把指针转移对到0度
         canvas.rotate(numble,radius,radius);
         RectF rectF = new RectF(radius-centerRadius/2,radius-centerRadius/2,radius+centerRadius/2,radius+centerRadius/2);
         Path path = new Path();
-        path.addArc(rectF,0,180);
+        path.addArc(rectF,0,180);//在Path对象上添加圆弧，让指针以圆弧包裹。
         path.moveTo(radius,pointerHigh);
         path.lineTo(radius-centerRadius/2,radius);
         path.lineTo(radius+centerRadius/2,radius);
-        path.close();
+        path.close();//闭合
         canvas.drawCircle(radius,radius,centerRadius,discPaint);
         canvas.drawPath(path,pointerPaint);
         canvas.drawCircle(radius,radius,centerRadius/2-dp2px(3),discPaint);
