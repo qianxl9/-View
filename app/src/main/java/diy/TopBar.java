@@ -80,7 +80,6 @@ public class TopBar extends RelativeLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int ibt=widthMeasureSpec;
-
         super.onMeasure(measureWidth(widthMeasureSpec),measureHeight(heightMeasureSpec));
     }
 

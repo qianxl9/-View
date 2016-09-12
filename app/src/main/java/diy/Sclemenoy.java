@@ -144,13 +144,12 @@ public class Sclemenoy extends View {
                         return true;
                     }
                 }
-                lastx =(int) event.getX();
                 invalidate();
                 break;
 
             case MotionEvent.ACTION_UP:
 
-                velocityTracker.computeCurrentVelocity(1000);//设置计量单位，毫秒
+                velocityTracker.computeCurrentVelocity(1000);//设置计量单位，毫秒. 就是多少毫秒收集一次移动的像素。
                 float currentVelocityx = velocityTracker.getXVelocity(); //分别获取X ，Y 轴的速度
                 float currentVelocityy = velocityTracker.getYVelocity();
 
@@ -158,9 +157,14 @@ public class Sclemenoy extends View {
                     return true;
                 }
                 //此处把X的距离取反是为了方便统一。fling()方法就是惯性滑动的处理，和动画。
+
                 scroller.fling(130,starty,(int)(-Math.abs(currentVelocityx)),(int)(Math.abs(currentVelocityy)),0,1080,0,1920);
+
+                velocityTracker.recycle();
+                velocityTracker = null ;
                 break;
         }
+        lastx =(int) event.getX();
         return true;
     }
 
@@ -168,18 +172,15 @@ public class Sclemenoy extends View {
     public void computeScroll() {  //计算滚动的距离
         if (scroller.computeScrollOffset()) {
             int currX = scroller.getCurrX();
-
             if (isLeft) {
                 lastMovex-=currX;
             }else {
                 lastMovex+=currX;
             }
-
             if ((lastMovex+mWith/2) >= mWith) {
                 lastMovex-=currX;
                 return;
             }
-
             if ((-lastMovex+mWith/2) >= 5000*13) {
                 lastMovex+=currX;
                 return;
